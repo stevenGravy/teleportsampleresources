@@ -1,0 +1,87 @@
+version: '2'
+services:
+  # This container depends on the config written by the configure container above, so it
+  # sleeps for a second on startup to allow the configure container to run first.
+  teleportnodedev:
+    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
+    container_name: teleportnodedev
+    entrypoint: /bin/sh
+    hostname: nodedev.example
+    command: -c "/usr/bin/dumb-init teleport start --roles=node --labels=env=dev --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+    volumes:
+      - ./node/libs/teleportnodedev:/var/lib/teleport
+      - ./node/teleport-dev.yaml:/etc/teleport.yaml
+      - ./node/pam/teleport_acct:/etc/pam-exec.d/teleport_acct
+      - ./node/pam/teleport:/etc/pam.d/teleport
+  teleportnodeprod:
+    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
+    container_name: teleportnodeprod
+    entrypoint: /bin/sh
+    hostname: nodeprod.example
+    command: -c "/usr/bin/dumb-init teleport start --roles=node --labels=env=prod --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+    volumes:
+      - ./node/libs/teleportnodeprod:/var/lib/teleport
+      - ./node/teleport-prod.yaml:/etc/teleport.yaml
+      - ./node/pam/teleport_acct:/etc/pam-exec.d/teleport_acct
+      - ./node/pam/teleport:/etc/pam.d/teleport
+  teleportpostgresdev:
+    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
+    container_name: teleportpostgresdev
+    entrypoint: /bin/sh
+    hostname: teleportpostgresdev.example
+    command: -c "/usr/bin/dumb-init teleport db start --labels=env=dev --name=postgresdev --protocol=postgres --uri=postgresdev:5432 --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+    volumes:
+      - ./node/libs/teleportpostgresdev:/var/lib/teleport
+  teleportpostgresprod:
+    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
+    container_name: teleportpostgresprod
+    entrypoint: /bin/sh
+    hostname: teleportpostgresprod.example
+    command: -c "/usr/bin/dumb-init teleport db start --labels=env=prod --name=postgresprod --protocol=postgres --uri=postgresprod:5432 --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+    volumes:
+      - ./node/libs/teleportpostgresprod:/var/lib/teleport
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    user: root
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/data:/var/lib/grafana
+    hostname: grafana
+  teleportappgrafana:
+    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
+    container_name: teleportapp
+    entrypoint: /bin/sh
+    hostname: teleportgrafana.example
+    command: -c "/usr/bin/dumb-init teleport app start --name=grafana --uri=\"http://grafana:3000\" --labels=env=dev --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN}"
+    volumes:
+      - ./node/libs/teleportgrafanapp:/var/lib/teleport
+  postgresdev:
+    image: postgres:12.2
+    container_name: postgresdev
+    hostname: postgresdev.example
+
+    environment:
+      - POSTGRES_USER=postgres # The PostgreSQL user (useful to connect to the database)
+      - POSTGRES_PASSWORD=password12 # The PostgreSQL password (useful to connect to the database)
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+    - ./dbdev/data:/var/lib/postgresql/data/
+    - ./postgres-initdb:/docker-entrypoint-initdb.d/
+    - ./dbdev:/var/lib/postgresql/certs/
+  postgresprod:
+    image: postgres:12.2
+    container_name: postgresprod
+    hostname: postgresprod.example
+
+    environment:
+      - POSTGRES_USER=postgres # The PostgreSQL user (useful to connect to the database)
+      - POSTGRES_PASSWORD=password12 # The PostgreSQL password (useful to connect to the database)
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+    - ./dbprod/data:/var/lib/postgresql/data/
+    - ./postgres-initdb:/docker-entrypoint-initdb.d/
+    - ./dbprod:/var/lib/postgresql/certs/
+

@@ -1,0 +1,26 @@
+
+[paths]
+provisioning = /etc/grafana/provisioning
+
+[server]
+enable_gzip = true
+root_url = https://TELEPORT_CLUSTER_PROXY
+
+[security]
+# If you want to embed grafana into an iframe for example
+allow_embedding = true
+
+[users]
+default_theme = dark
+
+[auth.jwt]
+enabled = true
+header_name = Teleport-Jwt-Assertion
+email_claim = sub
+auto_sign_up = true
+username_claim = sub
+jwk_set_url = https://TELEPORT_CLUSTER_PROXY/.well-known/jwks.json
+;jwk_set_file = /path/to/jwks.json
+;cache_ttl = 60m
+;expected_claims = {"aud": ["foo", "bar"]}
+;key_file = /path/to/key/file

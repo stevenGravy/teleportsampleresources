@@ -1,0 +1,80 @@
+kind: role
+version: v5
+metadata:
+  name: example-reviewer
+spec:
+  allow:
+    review_requests:
+      roles: ['example-prodops']
+---
+kind: role
+version: v5
+metadata:
+  name: example-devops
+spec:
+  allow:
+    db_names:
+    - '{{internal.db_names}}'
+    - '*'
+    db_labels:
+      'env': 'dev'
+    app_labels:
+      '*': '*'
+    logins:
+    - '{{internal.logins}}'
+    - ubuntu
+    request:
+      roles: ['example-prodops']
+---
+kind: role
+version: v5
+metadata:
+  name: example-prodops
+spec:
+  allow:
+    logins: ['ubuntu']
+    node_labels:
+      'env': 'prod'
+    db_names:
+    - '{{internal.db_names}}'
+    - '*'
+    db_labels:
+      'env': 'prod'
+---
+kind: role
+version: v5
+metadata:
+  name: example-editor
+spec:
+  allow:
+    impersonate:
+      roles:
+      - Db
+      users:
+      - Db
+    rules:
+    - resources:
+      - user
+      verbs:
+      - list
+      - create
+      - read
+      - update
+      - delete
+    - resources:
+      - role
+      verbs:
+      - list
+      - create
+      - read
+      - update
+      - delete
+    - resources:
+      - token
+      verbs:
+      - list
+      - create
+      - read
+      - update
+      - delete
+
