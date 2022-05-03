@@ -30,6 +30,17 @@ Impersonate configuration in role required in Teleport cloud.
       - Db
 ```
 
+You can try out sample roles
+```bash
+tctl create -f roles/roles.yaml
+```
+Roles Sample:
+  - `example-editor` allows for editing users, roles, tokens and creating signed db certs
+  - `example-devops` can access dev labeled ssh node and dbs. Can request `example-prodops` access.
+  - `example-prodops` can access prod labele ssh and dbs
+  - `example-reviewer` can review and approve `example-prodops` access requests
+
+
 
 # Step 1. Set Makefile
 
@@ -77,6 +88,9 @@ make up
 # Test resources
 
 If you haven't setup roles you can test out access with the roles under the directory roles.  
+
+The ssh nodes and app access are available in the web console or via `tsh`. 
+
 
 db tests:
 ```bash
