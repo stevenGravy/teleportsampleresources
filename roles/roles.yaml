@@ -23,6 +23,8 @@ spec:
     - postgres      
     app_labels:
       '*': '*'
+    labels:
+      env: dev
     logins:
     - '{{internal.logins}}'
     - ubuntu
@@ -36,6 +38,8 @@ metadata:
 spec:
   allow:
     logins: ['ubuntu']
+    labels:
+      env: dev
     node_labels:
       'env': 'prod'
     db_names:
