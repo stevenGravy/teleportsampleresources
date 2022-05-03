@@ -18,6 +18,9 @@ spec:
     - '*'
     db_labels:
       'env': 'dev'
+    db_users:
+    - '{{internal.db_names}}'
+    - postgres      
     app_labels:
       '*': '*'
     logins:
@@ -38,6 +41,9 @@ spec:
     db_names:
     - '{{internal.db_names}}'
     - '*'
+    db_users:
+    - '{{internal.db_names}}'
+    - postgres
     db_labels:
       'env': 'prod'
 ---
