@@ -29,7 +29,9 @@ setup:
 	@echo "setup grafana"
 	@cp ./grafana/grafana.ini.template ./grafana/grafana.ini
 	@sed -i  "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
+	@echo "setup database certs"
 	@sudo chown 999 dbdev/server.key dbprod/server.key
+	@sudo chmod +r dbdev/server.c* dbprod/server.c*
 # change to this line when on MacOS
 #	@sed -i "" "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
 
