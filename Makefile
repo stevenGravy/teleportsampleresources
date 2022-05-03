@@ -6,7 +6,7 @@ TELEPORT_CLUSTER_PROXY ?=
 #Version client should be, e.g. 8.3.7 9.0.1....  Should match
 # the server version. Confirm version with
 # curl https://teleport.example.com/webapi/ping | jq
-TELEPORT_VERSION ?= 8.3.7
+TELEPORT_VERSION ?= 9.1.3
 
 # Token to use for agents. should be app, database and node.  Create with below
 # tctl tokens add --type=app,db,node
@@ -20,6 +20,7 @@ export
 
 .PHONY: setup
 setup:
+	@chmod +x node/pam/teleport_acct
 	@echo "writing .env file for docker-compose"
 	@echo "TELEPORT_PROXY_PROXY=${TELEPORT_CLUSTER_PROXY}" > .env
 	@echo "TELEPORT_VERSION=${TELEPORT_VERSION}" >> .env
@@ -27,7 +28,9 @@ setup:
 	@echo ".env complete"
 	@echo "setup grafana"
 	@cp ./grafana/grafana.ini.template ./grafana/grafana.ini
-	@sed -i "" "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
+	@sed -i  "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
+# change to this line when on MacOS
+#	@sed -i "" "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
 
 .PHONY: clean-all-data-no-confirm
 clean-all-data-no-confirm:
