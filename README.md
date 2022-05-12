@@ -62,6 +62,9 @@ tctl tokens add --type=db,app,node
 
 Update the TELEPORT_TOKEN
 
+## Update the sed lines in the `Makefile` if on MacOS
+
+
 # Step 2. Generate db certs
 
 Generate
