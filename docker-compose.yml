@@ -55,7 +55,7 @@ services:
     container_name: teleportapp
     entrypoint: /bin/sh
     hostname: teleportgrafana.example
-    command: -c "/usr/bin/dumb-init teleport app start --name=grafana --uri=\"http://grafana:3000\" --labels=env=dev --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN}"
+    command: -c "/usr/bin/dumb-init teleport app start --name=grafana --uri=\"http://grafana:3000\" --labels=env=dev --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
     volumes:
       - ./node/libs/teleportgrafanapp:/var/lib/teleport
   postgresdev:
