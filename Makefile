@@ -28,12 +28,13 @@ setup:
 	@echo ".env complete"
 	@echo "setup grafana"
 	@cp ./grafana/grafana.ini.template ./grafana/grafana.ini
+# Comment out this line when on MacOS
 	@sed -i  "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
+# Uncomment this line when on MacOS
+#	@sed -i "" "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
 	@echo "setup database certs"
 	@sudo chown 999 dbdev/server.key dbprod/server.key
 	@sudo chmod +r dbdev/server.c* dbprod/server.c*
-# change to this line when on MacOS
-#	@sed -i "" "s|TELEPORT_CLUSTER_PROXY|${TELEPORT_CLUSTER_PROXY}|g" ./grafana/grafana.ini
 
 .PHONY: clean-all-data-no-confirm
 clean-all-data-no-confirm:
