@@ -35,8 +35,8 @@ tctl create -f roles/roles.yaml
 ```
 Roles Sample:
   - `example-editor` allows for editing users, roles, tokens and creating signed db certs
-  - `example-devops` can access dev labeled ssh node and dbs. Can request `example-prodops` access.
-  - `example-prodops` can access prod labele ssh and dbs
+  - `example-devops` can access dev labeled ssh node, app and dbs. Can request `example-prodops` access.
+  - `example-prodops` can access prod labeled ssh, app and dbs
   - `example-reviewer` can review and approve `example-prodops` access requests
 
 
