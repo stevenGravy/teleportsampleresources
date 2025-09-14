@@ -22,8 +22,8 @@ export
 
 .PHONY: setup
 setup:
-	@echo "writing .env file for docker-compose"
-	@echo "TELEPORT_PROXY_PROXY=${TELEPORT_CLUSTER_PROXY}" > .env
+	@echo "writing .env file for docker compose"
+	@echo "TELEPORT_CLUSTER_PROXY=${TELEPORT_CLUSTER_PROXY}" > .env
 	@echo "TELEPORT_VERSION=${TELEPORT_VERSION}" >> .env
 	@echo "TELEPORT_TOKEN=${TELEPORT_TOKEN}" >> .env
 	@echo "TELEPORT_DOCKER_IMAGE=${TELEPORT_DOCKER_IMAGE}" >> .env
@@ -66,9 +66,9 @@ clean-all-data-no-confirm:
 	
 .PHONY: up
 up:
-	docker-compose up -d
+	docker compose up -d
 
 .PHONY: down
 down:
-	docker-compose down
+	docker compose down
 

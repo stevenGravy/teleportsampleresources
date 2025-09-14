@@ -15,7 +15,7 @@ spec:
   allow:
     db_names:
     - '{{internal.db_names}}'
-    - '*'
+    - 'sportsdb_sample'
     db_labels:
       'env': 'dev'
     db_users:
@@ -32,6 +32,7 @@ spec:
     - '{{email.local(external.username)}}'
     request:
       roles: ['example-prodops']
+      search_as_roles: ['example-prodops']
   options:
     create_host_user_default_shell: bash
     create_host_user_mode: keep
@@ -49,7 +50,6 @@ spec:
       'env': 'prod'
     db_names:
     - '{{internal.db_names}}'
-    - '*'
     - 'sportsdb_sample'
     db_users:
     - '{{internal.db_names}}'

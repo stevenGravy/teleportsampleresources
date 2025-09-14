@@ -11,8 +11,7 @@ This repository provides how to have sample resources for a Teleport Cluster Pro
 # Prerequisites
 
 Software:
-- docker
-- docker-compose
+- docker (with compose plugin)
 - make
 
 
@@ -62,7 +61,10 @@ tctl tokens add --type=db,app,node
 
 Update the TELEPORT_TOKEN
 
-## Update the sed lines in the `Makefile` if on MacOS
+```bash
+TELEPORT_TOKEN ?= 9.1.3
+```
+
 
 
 # Step 2. Generate db certs
@@ -81,10 +83,11 @@ tctl auth sign --format=db --host=postgresprod --out=server --ttl=12190h
 Now copy these certs into their respective `dbdev` and `dbprod` where you are running your docker-compose
 
 
-# Step 3. Run Setup and start
+# Step 3. Run Setup, build and start
 
 ```bash
 make setup
+docker compose build
 make up
 ```
 

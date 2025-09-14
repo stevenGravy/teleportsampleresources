@@ -3,7 +3,10 @@ services:
   teleportnodedev:
     restart: always
     image: teleportnode
-    build: ./docker/ubuntu
+    build:
+      context: ./docker/ubuntu
+      args:
+        - TELEPORT_CLUSTER_PROXY=${TELEPORT_CLUSTER_PROXY}
     container_name: teleportnodedev
     entrypoint: /bin/sh
     hostname: nodedev.example
@@ -15,7 +18,10 @@ services:
   teleportnodeprod:
     restart: always
     image: teleportnode
-    build: ./docker/ubuntu
+    build:
+      context: ./docker/ubuntu
+      args:
+        - TELEPORT_CLUSTER_PROXY=${TELEPORT_CLUSTER_PROXY}
     container_name: teleportnodeprod
     entrypoint: /bin/sh
     hostname: nodeprod.example
