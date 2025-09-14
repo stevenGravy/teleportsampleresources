@@ -80,8 +80,7 @@ mkdir dbprod
 cd dbprod
 tctl auth sign --format=db --host=postgresprod --out=server --ttl=12190h
 ```
-Now copy these certs into their respective `dbdev` and `dbprod` where you are running your docker-compose
-
+Now copy these certs into their respective `dbdev` and `dbprod` where you are running your `docker compose` command.
 
 # Step 3. Run Setup, build and start
 
