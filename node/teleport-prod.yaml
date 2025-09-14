@@ -1,7 +1,0 @@
-version: v2
-teleport:
-ssh_service:
-  enabled: "yes"
-  pam:
-    enabled: true
-    service_name: "teleport"
