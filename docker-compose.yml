@@ -1,78 +1,76 @@
 version: '2'
 services:
-  # This container depends on the config written by the configure container above, so it
-  # sleeps for a second on startup to allow the configure container to run first.
   teleportnodedev:
-    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
+    restart: always
+    image: teleportnode
+    build:
+      context: ./docker/ubuntu
+      args:
+        - TELEPORT_CLUSTER_PROXY=${TELEPORT_CLUSTER_PROXY}
     container_name: teleportnodedev
     entrypoint: /bin/sh
     hostname: nodedev.example
-    command: -c "/usr/bin/dumb-init teleport start --roles=node --labels=env=dev --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+    command: -c "/usr/local/bin/teleport start ${ADDITIONAL_AGENT_PARAMETERS}"
     volumes:
-      - ./node/libs/teleportnodedev:/var/lib/teleport
       - ./node/teleport-dev.yaml:/etc/teleport.yaml
-      - ./node/pam/teleport_acct:/etc/pam-exec.d/teleport_acct
-      - ./node/pam/teleport:/etc/pam.d/teleport
+      - teleportdev:/var/lib/teleport
+      - ./node/token:/tmp/token
   teleportnodeprod:
-    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
+    restart: always
+    image: teleportnode
+    build:
+      context: ./docker/ubuntu
+      args:
+        - TELEPORT_CLUSTER_PROXY=${TELEPORT_CLUSTER_PROXY}
     container_name: teleportnodeprod
     entrypoint: /bin/sh
     hostname: nodeprod.example
-    command: -c "/usr/bin/dumb-init teleport start --roles=node --labels=env=prod --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+    command: -c "/usr/local/bin/teleport start ${ADDITIONAL_AGENT_PARAMETERS}"
     volumes:
-      - ./node/libs/teleportnodeprod:/var/lib/teleport
       - ./node/teleport-prod.yaml:/etc/teleport.yaml
-      - ./node/pam/teleport_acct:/etc/pam-exec.d/teleport_acct
-      - ./node/pam/teleport:/etc/pam.d/teleport
-  teleportpostgresdev:
-    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
-    container_name: teleportpostgresdev
-    entrypoint: /bin/sh
-    hostname: teleportpostgresdev.example
-    command: -c "/usr/bin/dumb-init teleport db start --labels=env=dev --name=postgresdev --protocol=postgres --uri=postgresdev:5432 --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+      - teleportprod:/var/lib/teleport
+      - ./node/token:/tmp/token
+  teleport:
+    image: ${TELEPORT_DOCKER_IMAGE}:${TELEPORT_VERSION}
+    container_name: teleport
+    hostname: teleport.example
     volumes:
-      - ./node/libs/teleportpostgresdev:/var/lib/teleport
-  teleportpostgresprod:
-    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
-    container_name: teleportpostgresprod
-    entrypoint: /bin/sh
-    hostname: teleportpostgresprod.example
-    command: -c "/usr/bin/dumb-init teleport db start --labels=env=prod --name=postgresprod --protocol=postgres --uri=postgresprod:5432 --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
-    volumes:
-      - ./node/libs/teleportpostgresprod:/var/lib/teleport
-  grafana:
+      - teleport:/var/lib/teleport
+      - ./node/teleport.yaml:/etc/teleport/teleport.yaml
+      - ./node/token:/tmp/token
+  grafana-dev:
     image: grafana/grafana
-    container_name: grafana
+    container_name: grafana-dev
     user: root
-    container_name: grafana
     restart: unless-stopped
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/data:/var/lib/grafana
+      - grafanadev:/var/lib/grafana
     hostname: grafana
-  teleportappgrafana:
-    image: quay.io/gravitational/teleport:${TELEPORT_VERSION}
-    container_name: teleportapp
-    entrypoint: /bin/sh
-    hostname: teleportgrafana.example
-    command: -c "/usr/bin/dumb-init teleport app start --name=grafana --uri=\"http://grafana:3000\" --labels=env=dev --auth-server=${TELEPORT_CLUSTER_PROXY} --token=${TELEPORT_TOKEN} ${ADDITIONAL_AGENT_PARAMETERS}"
+  grafana-prod:
+    image: grafana/grafana
+    container_name: grafana-prod
+    user: root
+    restart: unless-stopped
     volumes:
-      - ./node/libs/teleportgrafanapp:/var/lib/teleport
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - grafanaprod:/var/lib/grafana
+    hostname: grafana
   postgresdev:
-    image: postgres:12.2
+    image: postgres:16.0
     container_name: postgresdev
     hostname: postgresdev.example
 
     environment:
       - POSTGRES_USER=postgres # The PostgreSQL user (useful to connect to the database)
-      - POSTGRES_PASSWORD=password12 # The PostgreSQL password (useful to connect to the database)
+      - POSTGRES_PASSWORD=faddcd54-8f33-11f0-9d9f-0ee6e8c6731f # The PostgreSQL password (useful to connect to the database)
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-    - ./dbdev/data:/var/lib/postgresql/data/
+    - dbdevdata:/var/lib/postgresql/data/
     - ./postgres-initdb:/docker-entrypoint-initdb.d/
     - ./dbdev:/var/lib/postgresql/certs/
   postgresprod:
-    image: postgres:12.2
+    image: postgres:16.0
     container_name: postgresprod
     hostname: postgresprod.example
 
@@ -81,7 +79,15 @@ services:
       - POSTGRES_PASSWORD=password12 # The PostgreSQL password (useful to connect to the database)
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-    - ./dbprod/data:/var/lib/postgresql/data/
+    - dbproddata:/var/lib/postgresql/data/
     - ./postgres-initdb:/docker-entrypoint-initdb.d/
     - ./dbprod:/var/lib/postgresql/certs/
 
+volumes:
+  teleportdev:
+  teleportprod:
+  teleport:
+  dbproddata:
+  dbdevdata:
+  grafanadev:
+  grafanaprod:
