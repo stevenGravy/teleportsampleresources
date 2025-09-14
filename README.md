@@ -76,7 +76,7 @@ tctl auth sign --format=db --host=postgresdev --out=server --ttl=12190h
 cd ..
 mkdir dbprod
 cd dbprod
-tctl auth sign --format=db --host=postgresdev --out=server --ttl=12190h
+tctl auth sign --format=db --host=postgresprod --out=server --ttl=12190h
 ```
 Now copy these certs into their respective `dbdev` and `dbprod` where you are running your docker-compose
 

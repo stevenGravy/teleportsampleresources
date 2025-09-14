@@ -1,5 +1,5 @@
 kind: role
-version: v5
+version: v8
 metadata:
   name: example-reviewer
 spec:
@@ -8,7 +8,7 @@ spec:
       roles: ['example-prodops']
 ---
 kind: role
-version: v5
+version: v8
 metadata:
   name: example-devops
 spec:
@@ -22,34 +22,43 @@ spec:
     - '{{internal.db_names}}'
     - postgres      
     app_labels:
-      '*': '*'
+      'env': 'dev'
     node_labels:
       env: dev
     logins:
     - '{{internal.logins}}'
     - ubuntu
+    - '{{email.local(external.email)}}'
+    - '{{email.local(external.username)}}'
     request:
       roles: ['example-prodops']
+  options:
+    create_host_user_default_shell: bash
+    create_host_user_mode: keep
 ---
 kind: role
-version: v5
+version: v8
 metadata:
   name: example-prodops
 spec:
   allow:
-    logins: ['ubuntu']
-    node_labels:
-      env: dev
+    logins: ['ubuntu', '{{email.local(external.email)}}','{{email.local(external.username)}}', '{{internal.logins}}']
+    app_labels:
+      env: prod
     node_labels:
       'env': 'prod'
     db_names:
     - '{{internal.db_names}}'
     - '*'
+    - 'sportsdb_sample'
     db_users:
     - '{{internal.db_names}}'
     - postgres
     db_labels:
       'env': 'prod'
+  options:
+    create_host_user_default_shell: bash
+    create_host_user_mode: keep
 ---
 kind: role
 version: v5
@@ -87,4 +96,18 @@ spec:
       - read
       - update
       - delete
-
+---
+kind: access_monitoring_rule
+metadata:
+  name: prod-access
+spec:
+  automatic_review:
+    decision: APPROVED
+    integration: builtin
+  condition: |-
+    contains_all(set("example-prodops"), access_request.spec.roles) &&
+    access_request.spec.resource_labels_intersection["env"].contains("prod")
+  desired_state: reviewed
+  subjects:
+  - access_request
+version: v1
