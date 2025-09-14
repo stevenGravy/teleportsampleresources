@@ -44,7 +44,6 @@ services:
     image: grafana/grafana
     container_name: grafana-dev
     user: root
-    restart: unless-stopped
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - grafanadev:/var/lib/grafana
@@ -54,7 +53,6 @@ services:
     image: grafana/grafana
     container_name: grafana-prod
     user: root
-    restart: unless-stopped
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - grafanaprod:/var/lib/grafana
