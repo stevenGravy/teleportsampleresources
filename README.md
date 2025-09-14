@@ -95,6 +95,8 @@ make up
 
 If you haven't setup roles you can test out access with the roles under the directory roles.  
 
+The db connections can take a few minutes to be available. 
+
 The ssh nodes and app access are available in the web console or via `tsh`. 
 
 
