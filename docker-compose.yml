@@ -1,7 +1,7 @@
 version: '2'
 services:
   teleportnodedev:
-    restart: always
+    restart: unless-stopped
     image: teleportnode
     build:
       context: ./docker/ubuntu
@@ -16,7 +16,7 @@ services:
       - teleportdev:/var/lib/teleport
       - ./node/token:/tmp/token
   teleportnodeprod:
-    restart: always
+    restart: unless-stopped
     image: teleportnode
     build:
       context: ./docker/ubuntu
@@ -31,6 +31,7 @@ services:
       - teleportprod:/var/lib/teleport
       - ./node/token:/tmp/token
   teleport:
+    restart: unless-stopped
     image: ${TELEPORT_DOCKER_IMAGE}:${TELEPORT_VERSION}
     container_name: teleport
     hostname: teleport.example
@@ -39,6 +40,7 @@ services:
       - ./node/teleport.yaml:/etc/teleport/teleport.yaml
       - ./node/token:/tmp/token
   grafana-dev:
+    restart: unless-stopped
     image: grafana/grafana
     container_name: grafana-dev
     user: root
@@ -48,6 +50,7 @@ services:
       - grafanadev:/var/lib/grafana
     hostname: grafana
   grafana-prod:
+    restart: unless-stopped
     image: grafana/grafana
     container_name: grafana-prod
     user: root
@@ -57,6 +60,7 @@ services:
       - grafanaprod:/var/lib/grafana
     hostname: grafana
   postgresdev:
+    restart: unless-stopped
     image: postgres:16.0
     container_name: postgresdev
     hostname: postgresdev.example
@@ -70,6 +74,7 @@ services:
     - ./postgres-initdb:/docker-entrypoint-initdb.d/
     - ./dbdev:/var/lib/postgresql/certs/
   postgresprod:
+    restart: unless-stopped
     image: postgres:16.0
     container_name: postgresprod
     hostname: postgresprod.example
