@@ -39,7 +39,11 @@ Roles Sample:
   - `example-prodops` can access prod labeled ssh, app and dbs
   - `example-reviewer` can review and approve `example-prodops` access requests
 
+  A access monitoring rule `access_monitoring_rule` will auto approve requests for `example-prodops`
+    related resources.
 
+  Users should be unassigned to `access` role for these roles to work properly. `editor` and `auditor` are
+  still fine to assign.
 
 # Step 1. Set Makefile
 
