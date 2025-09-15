@@ -5,7 +5,7 @@ TELEPORT_CLUSTER_PROXY ?=
 
 #Version client should be, e.g. 8.3.7 9.0.1....  Should match
 # the server version. Confirm version with
-# curl https://teleport.example.com/webapi/ping | jq
+# curl https://teleport.example.com/webapi/find | jq '.server_version'
 TELEPORT_VERSION ?=18.2.1
 
 # Token to use for agents. should be app, database and node.  Create with below
