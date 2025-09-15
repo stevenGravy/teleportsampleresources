@@ -5,8 +5,7 @@ This repository provides how to have sample resources for a Teleport Cluster Pro
   - Web App
   - PostgreSQL DB
 
-![image](https://user-images.githubusercontent.com/60704961/164133283-8c256601-4774-42f7-a841-0edc0adae204.png)
-
+<img width="1490" height="670" alt="image" src="https://github.com/user-attachments/assets/b18372a8-cb30-496d-8eca-59fcf9d544e0" />
 
 # Prerequisites
 
