@@ -33,6 +33,15 @@ spec:
     request:
       roles: ['example-prodops']
       search_as_roles: ['example-prodops']
+    kubernetes_labels:
+      '*': '*'
+    kubernetes_resources:
+      - kind: '*'
+        api_group: '*'
+        namespace: 'example-dev'
+        name: '*'
+        verbs: ['*']
+    kubernetes_groups: ['pod-exec']
   options:
     create_host_user_default_shell: bash
     create_host_user_mode: keep
@@ -56,6 +65,15 @@ spec:
     - postgres
     db_labels:
       'env': 'prod'
+    kubernetes_labels:
+      '*': '*'
+    kubernetes_resources:
+      - kind: '*'
+        api_group: '*'
+        namespace: 'example-prod'
+        name: '*'
+        verbs: ['*']
+    kubernetes_groups: ['pod-exec']
   options:
     create_host_user_default_shell: bash
     create_host_user_mode: keep
