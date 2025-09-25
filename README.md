@@ -122,6 +122,20 @@ You are now connected to database "sportsdb_sample" as user "postgres".
 sportsdb_sample=# select * from american_football_event_states;
 ```
 
+# Step 4 Setup Kubernetes
+
+The folder `./k8s` contains a `microk8s` setup script `installmicrok8s.sh`.
+
+1. Run this script on a Ubuntu box. Make sure the `clusterrole.yaml` file is in the same folder.
+
+2. Confirm access. The user roles has access to seeing the `example-dev` namespace by default
+
+   `kubectl get ns`
+   `kubectl exec -it -n example-dev nginx-dev -- bash`
+
+3. After execing the session can be replayed.
+4. The user can request the `example-prod` namespace as well.
+
 
 
 
