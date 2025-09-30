@@ -54,7 +54,7 @@ TELEPORT_CLUSTER_PROXY ?= teleport.example.com:443
 
 Set the version to match the Teleport Cluster
 
-TELEPORT_CLUSTER_PROXY ?= 9.1.3
+TELEPORT_VERSION ?= 9.1.3
 
 Generate a token for db,app, and ssh.
 
