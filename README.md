@@ -4,6 +4,7 @@ This repository provides how to have sample resources for a Teleport Cluster Pro
   - SSH Nodes
   - Web App
   - PostgreSQL DB
+  - Kubernetes with microk8s
 
 <img width="1490" height="670" alt="image" src="https://github.com/user-attachments/assets/b18372a8-cb30-496d-8eca-59fcf9d544e0" />
 
@@ -65,7 +66,7 @@ tctl tokens add --type=db,app,node
 Update the TELEPORT_TOKEN
 
 ```bash
-TELEPORT_TOKEN ?= 9.1.3
+TELEPORT_TOKEN ?= abc123
 ```
 
 
