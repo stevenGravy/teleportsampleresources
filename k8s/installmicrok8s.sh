@@ -9,10 +9,17 @@ microk8s status --wait-ready
 
 microk8s enable rbac
 sudo snap install kubectl --classic
-microk8s config > .kube/config
-kubectl get nodes
-kubectl create ns example-dev
-kubectl create ns example-prod
-kubectl run nginx-dev --image=nginx --restart=Always -n example-dev
-kubectl run nginx-dev --image=nginx --restart=Always -n example-prod
-kubectl apply -f clusterrole.yaml
+microk8s config > ~/.kube/config
+
+
+k() {
+    microk8s kubectl "$@"
+}
+
+k version
+k get nodes
+k create ns example-dev
+k create ns example-prod
+k run nginx-dev --image=nginx --restart=Always -n example-dev
+k run nginx-dev --image=nginx --restart=Always -n example-prod
+k apply -f clusterrole.yaml
