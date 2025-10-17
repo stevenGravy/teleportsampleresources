@@ -5,6 +5,7 @@ metadata:
 spec:
   allow:
     review_requests:
+      preview_as_roles: ['example-prodops']
       roles: ['example-prodops']
 ---
 kind: role
