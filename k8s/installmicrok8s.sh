@@ -14,5 +14,5 @@ kubectl get nodes
 kubectl create ns example-dev
 kubectl create ns example-prod
 kubectl run nginx-dev --image=nginx --restart=Always -n example-dev
-kubectl run nginx-dev --image=nginx --restart=Always -n example-prod
+kubectl run nginx-prod --image=nginx --restart=Always -n example-prod
 kubectl apply -f clusterrole.yaml
