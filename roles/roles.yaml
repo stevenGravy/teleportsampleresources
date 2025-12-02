@@ -43,9 +43,18 @@ spec:
         name: '*'
         verbs: ['*']
     kubernetes_groups: ['pod-exec']
+    windows_desktop_labels:
+      env: dev
+      environment: analyst
+    windows_desktop_logins:
+    - '{{internal.windows_logins}}'
+    - analyst
+    desktop_groups:
+    - Administrators
   options:
     create_host_user_default_shell: bash
     create_host_user_mode: keep
+    create_desktop_user: true
 ---
 kind: role
 version: v8
@@ -54,10 +63,13 @@ metadata:
 spec:
   allow:
     logins: ['ubuntu', '{{email.local(external.email)}}','{{email.local(external.username)}}', '{{internal.logins}}']
+    # Web App
     app_labels:
       env: prod
+    # SSH
     node_labels:
       'env': 'prod'
+    # DB
     db_names:
     - '{{internal.db_names}}'
     - 'sportsdb_sample'
@@ -66,6 +78,7 @@ spec:
     - postgres
     db_labels:
       'env': 'prod'
+    # k8s
     kubernetes_labels:
       '*': '*'
     kubernetes_resources:
@@ -75,9 +88,19 @@ spec:
         name: '*'
         verbs: ['*']
     kubernetes_groups: ['pod-exec']
+    # Windows
+    windows_desktop_labels:
+      env: prod
+      environment: analyst
+    windows_desktop_logins:
+    - '{{internal.windows_logins}}'
+    - analyst
+    desktop_groups:
+    - Administrators
   options:
     create_host_user_default_shell: bash
     create_host_user_mode: keep
+    create_desktop_user: true
 ---
 kind: role
 version: v5
