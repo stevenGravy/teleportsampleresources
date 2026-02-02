@@ -42,7 +42,7 @@ spec:
         namespace: 'example-dev'
         name: '*'
         verbs: ['*']
-    kubernetes_groups: ['pod-exec']
+    kubernetes_groups: ['system:masters']
     windows_desktop_labels:
       env: dev
       environment: analyst
